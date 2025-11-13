@@ -43,6 +43,9 @@ dependencies {
     implementation 'io.github.resilience4j:resilience4j-ratelimiter'
     implementation 'io.micrometer:micrometer-core' // 메트릭 (필요 시)
 
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
+
     compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
