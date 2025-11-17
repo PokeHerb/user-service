@@ -1,4 +1,4 @@
-package org.pokeherb.hubservice.infrastructure.client;
+package org.pokeherb.userservice.infrastructure.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 

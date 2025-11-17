@@ -1,4 +1,4 @@
-package org.pokeherb.hubservice.infrastructure.config;
+package org.pokeherb.userservice.infrastructure.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

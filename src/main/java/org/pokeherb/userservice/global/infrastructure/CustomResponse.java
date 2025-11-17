@@ -1,4 +1,4 @@
-package org.pokeherb.hubservice.global.infrastructure;
+package org.pokeherb.userservice.global.infrastructure;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import org.pokeherb.hubservice.global.infrastructure.error.BaseErrorCode;
-import org.pokeherb.hubservice.global.infrastructure.success.BaseSuccessCode;
+import org.pokeherb.userservice.global.infrastructure.error.BaseErrorCode;
+import org.pokeherb.userservice.global.infrastructure.success.BaseSuccessCode;
 import org.springframework.http.HttpStatus;
 
 @Builder
