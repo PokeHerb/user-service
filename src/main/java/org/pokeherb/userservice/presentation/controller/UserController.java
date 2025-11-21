@@ -5,12 +5,16 @@ import lombok.RequiredArgsConstructor;
 import org.pokeherb.userservice.application.dto.TokenInfo;
 import org.pokeherb.userservice.application.dto.UserRegister;
 import org.pokeherb.userservice.application.dto.UserRegisterRequest;
+import org.pokeherb.userservice.application.dto.UserUpdate;
 import org.pokeherb.userservice.application.service.TokenGenerateService;
 import org.pokeherb.userservice.application.service.UserRegisterService;
+import org.pokeherb.userservice.application.service.UserUpdateService;
 import org.pokeherb.userservice.presentation.dto.TokenRequest;
 import org.pokeherb.userservice.presentation.dto.TokenResponse;
 import org.pokeherb.userservice.presentation.dto.UserResponse;
+import org.pokeherb.userservice.presentation.dto.UserUpdateRequest;
 import org.pokeherb.userservice.presentation.validator.UserRegisterValidator;
+import org.pokeherb.userservice.presentation.validator.UserUpdateValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -26,6 +30,7 @@ public class UserController {
 
     private final TokenGenerateService tokenService;
     private final UserRegisterService registerService;
+    private final UserUpdateService updateService;
 
     // 토큰 발급
     @PostMapping("/token")
@@ -60,7 +65,7 @@ public class UserController {
     }
 
     // 로그인한 사용자 정보 조회
-    @GetMapping("profile")
+    @GetMapping("/profile")
     public UserResponse getProfile(@AuthenticationPrincipal Jwt jwt) {
         UUID userId = UUID.fromString(jwt.getSubject());
         Map<String, Object> claims = jwt.getClaims();
@@ -71,5 +76,23 @@ public class UserController {
                 (String) claims.getOrDefault("email", ""),
                 name,
                 (String) claims.getOrDefault("phone", ""));
+    }
+
+    // 회원정보 수정
+    @PatchMapping("/profile")
+    public void updateProfile(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody UserUpdateRequest req) {
+        // 추가 검증 처리
+        new UserUpdateValidator().validateUpdateProfile(req);
+
+        UUID userId = UUID.fromString(jwt.getSubject());
+        UserUpdate data = UserUpdate
+                .builder()
+                .email(req.email())
+                .firstName(req.firstName())
+                .lastName(req.lastName())
+                .phone(req.phone())
+                .build();
+
+        updateService.update(userId, data);
     }
 }
