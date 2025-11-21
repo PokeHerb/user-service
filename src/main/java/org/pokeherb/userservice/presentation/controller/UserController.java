@@ -9,10 +9,7 @@ import org.pokeherb.userservice.application.dto.UserUpdate;
 import org.pokeherb.userservice.application.service.TokenGenerateService;
 import org.pokeherb.userservice.application.service.UserRegisterService;
 import org.pokeherb.userservice.application.service.UserUpdateService;
-import org.pokeherb.userservice.presentation.dto.TokenRequest;
-import org.pokeherb.userservice.presentation.dto.TokenResponse;
-import org.pokeherb.userservice.presentation.dto.UserResponse;
-import org.pokeherb.userservice.presentation.dto.UserUpdateRequest;
+import org.pokeherb.userservice.presentation.dto.*;
 import org.pokeherb.userservice.presentation.validator.UserRegisterValidator;
 import org.pokeherb.userservice.presentation.validator.UserUpdateValidator;
 import org.springframework.http.HttpStatus;
@@ -94,5 +91,14 @@ public class UserController {
                 .build();
 
         updateService.update(userId, data);
+    }
+
+    // 회원 비밀번호 변경
+    @PatchMapping("/password")
+    public void changePassword(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody PasswordChangeRequest req) {
+        // 추가 검증 처리
+        new UserUpdateValidator().validateChangePassword(req);
+
+        updateService.updatePassword(UUID.fromString(jwt.getSubject()), req.password());
     }
 }

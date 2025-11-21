@@ -2,6 +2,7 @@ package org.pokeherb.userservice.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.pokeherb.userservice.application.dto.UserUpdate;
 import org.pokeherb.userservice.infrastructure.keycloak.config.KeycloakProperties;
@@ -50,5 +51,16 @@ public class UserUpdateService {
     // 사용자 UUID로 키클록 회원 정보 조회
     private UserRepresentation getUserProfile(UUID userId) {
         return keycloak.realm(properties.realm()).users().get(userId.toString()).toRepresentation();
+    }
+
+
+    // 회원 비밀번호 변경
+    public void updatePassword(UUID userId, String newPassword) {
+        CredentialRepresentation passwordCred = new CredentialRepresentation();
+        passwordCred.setTemporary(false);
+        passwordCred.setType(CredentialRepresentation.PASSWORD);
+        passwordCred.setValue(newPassword);
+
+        keycloak.realm(properties.realm()).users().get(userId.toString()).resetPassword(passwordCred);
     }
 }
