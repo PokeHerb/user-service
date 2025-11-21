@@ -2,7 +2,7 @@ server:
   port: 3010
 spring:
   application:
-    name: hub-service
+    name: user-service
   config:
     import: 'optional:configserver: '
   cloud:
