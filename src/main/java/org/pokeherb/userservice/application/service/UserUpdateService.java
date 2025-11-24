@@ -2,7 +2,9 @@ package org.pokeherb.userservice.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.RoleScopeResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.pokeherb.userservice.application.dto.UserUpdate;
 import org.pokeherb.userservice.infrastructure.keycloak.config.KeycloakProperties;
@@ -62,5 +64,21 @@ public class UserUpdateService {
         passwordCred.setValue(newPassword);
 
         keycloak.realm(properties.realm()).users().get(userId.toString()).resetPassword(passwordCred);
+    }
+
+    // 회원 역할 변경
+    public void updateUserRole(UUID userId, List<String> roleNames) {
+        String id = userId.toString();
+        String realm = properties.realm();
+        RoleScopeResource resource = keycloak.realm(realm).users().get(id).roles().realmLevel();
+
+        // 기존 역할 제거
+        resource.remove(resource.listAll());
+
+        // 새 역할 추가
+        List<RoleRepresentation> newRoles = roleNames.stream()
+                .map(roleName -> keycloak.realm(realm).roles().get(roleName).toRepresentation()).toList();
+
+        resource.add(newRoles);
     }
 }

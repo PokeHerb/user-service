@@ -9,6 +9,8 @@ import org.pokeherb.userservice.application.dto.UserUpdate;
 import org.pokeherb.userservice.application.service.TokenGenerateService;
 import org.pokeherb.userservice.application.service.UserRegisterService;
 import org.pokeherb.userservice.application.service.UserUpdateService;
+import org.pokeherb.userservice.domain.exception.RoleErrorCode;
+import org.pokeherb.userservice.global.infrastructure.exception.CustomException;
 import org.pokeherb.userservice.presentation.dto.*;
 import org.pokeherb.userservice.presentation.validator.UserRegisterValidator;
 import org.pokeherb.userservice.presentation.validator.UserUpdateValidator;
@@ -17,6 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -100,5 +103,15 @@ public class UserController {
         new UserUpdateValidator().validateChangePassword(req);
 
         updateService.updatePassword(UUID.fromString(jwt.getSubject()), req.password());
+    }
+
+    // 새 역할 부여
+    @PatchMapping("/role")
+    public void changeRole(@AuthenticationPrincipal Jwt jwt, @RequestBody List<String> roles) {
+        if (roles == null || roles.isEmpty()) {
+            throw new CustomException(RoleErrorCode.ROLE_NOT_PROVIDED);
+        }
+
+        updateService.updateUserRole(UUID.fromString(jwt.getSubject()), roles);
     }
 }
