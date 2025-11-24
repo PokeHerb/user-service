@@ -9,9 +9,15 @@ import org.pokeherb.userservice.application.service.TokenGenerateService;
 import org.pokeherb.userservice.application.service.UserRegisterService;
 import org.pokeherb.userservice.presentation.dto.TokenRequest;
 import org.pokeherb.userservice.presentation.dto.TokenResponse;
+import org.pokeherb.userservice.presentation.dto.UserResponse;
 import org.pokeherb.userservice.presentation.validator.UserRegisterValidator;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,5 +57,19 @@ public class UserController {
                 .build();
 
         registerService.registerUser(data);
+    }
+
+    // 로그인한 사용자 정보 조회
+    @GetMapping("profile")
+    public UserResponse getProfile(@AuthenticationPrincipal Jwt jwt) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        Map<String, Object> claims = jwt.getClaims();
+        String name = claims.getOrDefault("family_name", "") + (String) claims.getOrDefault("given_name", "");
+
+        return new UserResponse(userId,
+                (String) claims.getOrDefault("preferred_username", ""),
+                (String) claims.getOrDefault("email", ""),
+                name,
+                (String) claims.getOrDefault("phone", ""));
     }
 }
