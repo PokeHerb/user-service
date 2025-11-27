@@ -42,7 +42,11 @@ public class UserRegisterService {
 
         // 추가 정보 처리
         Map<String, List<String>> attributes = new HashMap<>();
-        attributes.put("phone", List.of(data.phone()));
+
+        if (data.phone() != null && !data.phone().isBlank()) {
+            attributes.put("phone", List.of(data.phone()));
+        }
+
         user.setAttributes(attributes);
 
         // 회원 가입 시키기
@@ -68,7 +72,7 @@ public class UserRegisterService {
 
 
         // 기본 Role 부여
-        RoleRepresentation userRoles = keycloak.realm(properties.realm()).roles().get("ROLE_USER").toRepresentation();
+        RoleRepresentation userRoles = keycloak.realm(properties.realm()).roles().get("ROLE_PENDING").toRepresentation();
         userResource.get(userId).roles().realmLevel().add(List.of(userRoles));
     }
 }

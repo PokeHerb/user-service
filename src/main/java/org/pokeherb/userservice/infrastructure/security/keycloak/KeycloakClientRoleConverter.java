@@ -13,17 +13,13 @@ import java.util.stream.Collectors;
 public class KeycloakClientRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
-        Map<String, Object> resourceAccess = jwt.getClaimAsMap("resource_access");
+        Map<String, Object> resourceAccess = jwt.getClaimAsMap("realm_access");
         if (resourceAccess == null) return Collections.emptyList();
 
-        Object client = resourceAccess.get("clientId");
-        if (!(client instanceof Map)) return Collections.emptyList();
-
-        Object roles = ((Map<?,?>) client).get("roles");
-        if (!(roles instanceof Collection)) return Collections.emptyList();
-
+        Object roles = resourceAccess.get("roles");
         return ((Collection<?>) roles).stream()
                 .map(Object::toString)
+                .filter(s -> s.startsWith("ROLE_"))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
