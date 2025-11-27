@@ -2,6 +2,7 @@ package org.pokeherb.userservice.presentation.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.pokeherb.userservice.application.dto.TokenInfo;
 import org.pokeherb.userservice.application.dto.UserRegister;
 import org.pokeherb.userservice.application.dto.UserRegisterRequest;
@@ -15,6 +16,7 @@ import org.pokeherb.userservice.presentation.dto.*;
 import org.pokeherb.userservice.presentation.validator.UserRegisterValidator;
 import org.pokeherb.userservice.presentation.validator.UserUpdateValidator;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/user")
 public class UserController {
 
     private final TokenGenerateService tokenService;
@@ -113,5 +115,12 @@ public class UserController {
         }
 
         updateService.updateUserRole(UUID.fromString(jwt.getSubject()), roles);
+    }
+
+    // 회원 가입 승인
+    @PatchMapping("/approve/{userId}/{role}")
+    @PreAuthorize("hasAnyRole('MASTER','HUB_MANAGER')")
+    public void approve(@PathVariable("userId") UUID userId, @PathVariable("role") String role) {
+        updateService.updateUserRole(userId, List.of("ROLE_" + role));
     }
 }
