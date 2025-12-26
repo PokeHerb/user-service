@@ -6,7 +6,7 @@ plugins {
 
 group = 'org.pokeherb'
 version = '0.0.1-SNAPSHOT'
-description = 'Hub service'
+description = 'User service'
 
 java {
 	toolchain {
@@ -49,13 +49,13 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14'
 
     implementation 'com.github.loki4j:loki-logback-appender:2.0.0'
     implementation 'org.keycloak:keycloak-admin-client:26.0.7'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
