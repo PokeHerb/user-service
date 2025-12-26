@@ -47,6 +47,16 @@ public class UserRegisterService {
             attributes.put("phone", List.of(data.phone()));
         }
 
+        if (data.slackId() != null) {
+            attributes.put("slackId", List.of(data.slackId()));
+        }
+        if (data.hubId() != null) {
+            attributes.put("hubId", List.of(String.valueOf(data.hubId())));
+        }
+        if (data.vendorId() != null) {
+            attributes.put("vendorId", List.of(data.vendorId().toString()));
+        }
+
         user.setAttributes(attributes);
 
         // 회원 가입 시키기

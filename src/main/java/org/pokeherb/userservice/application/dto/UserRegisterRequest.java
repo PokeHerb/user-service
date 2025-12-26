@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.UUID;
+
 public record UserRegisterRequest(
         @NotBlank
         @Size(min=4, max=10)
@@ -26,5 +28,12 @@ public record UserRegisterRequest(
         @NotBlank
         String lastName,
 
-        String phone
+        String phone,
+
+        @NotBlank
+        String slackId,
+
+        Long hubId,
+
+        UUID vendorId
 ) {}

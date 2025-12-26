@@ -61,6 +61,9 @@ public class UserController {
                 .firstName(req.firstName())
                 .lastName(req.lastName())
                 .phone(req.phone())
+                .slackId(req.slackId())
+                .hubId(req.hubId())
+                .vendorId(req.vendorId())
                 .build();
 
         registerService.registerUser(data);
@@ -93,6 +96,9 @@ public class UserController {
                 .firstName(req.firstName())
                 .lastName(req.lastName())
                 .phone(req.phone())
+                .slackId(req.slackId())
+                .hubId(req.hubId())
+                .vendorId(req.vendorId())
                 .build();
 
         updateService.update(userId, data);

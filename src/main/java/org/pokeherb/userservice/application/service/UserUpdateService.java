@@ -44,6 +44,18 @@ public class UserUpdateService {
             attributes.put("phone", List.of(data.phone()));
         }
 
+        if (StringUtils.hasText(data.slackId())) {
+            attributes.put("slackId", List.of(data.slackId()));
+        }
+
+        if (data.hubId() != null) {
+            attributes.put("hubId", List.of(String.valueOf(data.hubId())));
+        }
+
+        if (data.vendorId() != null) {
+            attributes.put("vendorId", List.of(data.vendorId().toString()));
+        }
+
         user.setAttributes(attributes);
 
         // 업데이트 처리
